@@ -4,7 +4,8 @@
       "Bash(ls -R \"/mnt/c/Users/LENOVO/Music/Boussole du Savoir\" 2>&1)",
       "Read(//mnt/c/Users/LENOVO/Music/**)",
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\LENOVO\\\\Music\\\\Boussole du Savoir\\\\\" -Force | Where-Object {$_.Name -match \"package.json|next.config|tsconfig\"} | Select-Object Name)",
-      "PowerShell(head -30)"
+      "PowerShell(head -30)",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"C:\\\\Users\\\\LENOVO\\\\Music\\\\Boussole du Savoir\\\\components\\\\layout\")"
     ]
   }
 }
