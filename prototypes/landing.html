@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boussole du Savoir — Plateforme Éducative</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Default: Modern Balanced */
+            --primary-main: #1E4073;
+            --primary-light: #F5E6D3;
+            --accent-gold: #D4AF37;
+            --accent-secondary: #5D7B6F;
+            --text-dark: #2C3E50;
+            --text-light: #ECF0F1;
+            --success: #27AE60;
+            --error: #E74C3C;
+            --background: #FAFAF7;
+            --border: #D5C9B8;
+            --shadow: 0 4px 12px rgba(30, 64, 115, 0.1);
+        }
+
+        /* Primaire Theme */
+        body.primaire {
+            --primary-main: #FF6B9D;
+            --primary-light: #FFE5F0;
+            --accent-gold: #F5A962;
+            --accent-secondary: #7ED4CE;
+            --background: linear-gradient(135deg, #FFE5F0 0%, #FFD4E5 100%);
+            --shadow: 0 4px 12px rgba(255, 107, 157, 0.15);
+        }
+
+        body.primaire .feature-card {
+            background: white;
+            border-top: 4px solid var(--primary-main);
+        }
+
+        /* Collège/Lycée Theme */
+        body.college {
+            --primary-main: #2C5AA0;
+            --primary-light: #F5E6D3;
+            --accent-gold: #D4AF37;
+            --accent-secondary: #5D7B6F;
+            --background: linear-gradient(135deg, #F5E6D3 0%, #E8D7C3 100%);
+            --shadow: 0 4px 12px rgba(44, 90, 160, 0.1);
+        }
+
+        /* Université Theme */
+        body.universite {
+            --primary-main: #2C3E50;
+            --primary-light: #ECF0F1;
+            --accent-gold: #1ABC9C;
+            --accent-secondary: #34495E;
+            --background: linear-gradient(135deg, #ECF0F1 0%, #D5DBDB 100%);
+            --text-dark: #1A1A1A;
+            --shadow: 0 4px 12px rgba(44, 62, 80, 0.12);
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-main);
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        /* Main Section */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero-text h1 {
+            font-size: 2.8rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--primary-main);
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+            opacity: 0.85;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary-main) 0%, var(--accent-secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(44, 90, 160, 0.25);
+        }
+
+        .hero-visual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(44, 90, 160, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-main);
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            opacity: 0.75;
+        }
+
+        /* Sign Up Form Modal (Hidden by default) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideUpModal 0.3s ease;
+        }
+
+        @keyframes slideUpModal {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary-beige);
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            color: var(--primary-main);
+            font-size: 1.8rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .close-btn:hover {
+            opacity: 1;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.85rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: rgba(44, 90, 160, 0.02);
+        }
+
+        .form-group.hidden {
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary-main) 0%, var(--accent-secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 90, 160, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .step {
+            flex: 1;
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: var(--primary-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .hero-visual {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .feature-card {
+                padding: 1.2rem;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+            color: var(--text-dark);
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--primary-main);
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: opacity 0.2s;
+        }
+
+        /* Branch Selector Buttons */
+        .branch-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .branch-btn {
+            padding: 0.7rem 1.5rem;
+            border: 2px solid var(--border);
+            background: white;
+            color: var(--text-dark);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .branch-btn:hover {
+            border-color: var(--primary-main);
+            background: rgba(var(--primary-main), 0.05);
+        }
+
+        .branch-btn.active {
+            background: var(--primary-main);
+            color: white;
+            border-color: var(--primary-main);
+        }
+
+        .footer-links a:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">🧭 Boussole du Savoir</div>
+            <p class="tagline">Ton compagnon éducatif du primaire à l'université</p>
+
+            <!-- Branch Selector -->
+            <div class="branch-selector">
+                <button class="branch-btn active" onclick="changeBranch('primaire')">🎨 Primaire</button>
+                <button class="branch-btn" onclick="changeBranch('college')">📚 Collège/Lycée</button>
+                <button class="branch-btn" onclick="changeBranch('universite')">🎓 Université</button>
+            </div>
+        </header>
+
+        <!-- Main Hero Section -->
+        <div class="main-content">
+            <div class="hero-text">
+                <h1>Apprends à ton rythme, progresse sans limite</h1>
+                <p>
+                    Une plateforme éducative conçue pour t'accompagner du primaire jusqu'à l'université.
+                    Défis ludiques, vidéos pédagogiques, tuteur IA — tout ce qu'il faut pour réussir.
+                </p>
+                <button class="cta-button" onclick="openSignUpModal()">
+                    Commencer Maintenant
+                </button>
+            </div>
+
+            <div class="hero-visual">
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3>Système de Niveaux</h3>
+                    <p>20-30 niveaux progressifs avec défis ludiques</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">❤️</div>
+                    <h3>Système de Cœurs</h3>
+                    <p>3 vies par niveau, progression transparente</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Tuteur IA</h3>
+                    <p>Chat intelligent adapté à ton niveau</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Tableau de Bord</h3>
+                    <p>Suivi complet de ta progression</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Up Modal -->
+        <div id="signUpModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Bienvenue !</h2>
+                    <button class="close-btn" onclick="closeSignUpModal()">✕</button>
+                </div>
+
+                <div class="step-indicator">
+                    <div class="step active" id="step1"></div>
+                    <div class="step" id="step2"></div>
+                    <div class="step" id="step3"></div>
+                </div>
+
+                <form id="signUpForm">
+                    <!-- Step 1: Informations personnelles -->
+                    <div id="formStep1">
+                        <div class="form-group">
+                            <label for="firstName">Prénom *</label>
+                            <input type="text" id="firstName" placeholder="Ex: Ahmed" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Nom *</label>
+                            <input type="text" id="lastName" placeholder="Ex: Toukouzou" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" placeholder="toi@example.com" required>
+                        </div>
+                        <button type="button" class="submit-btn" onclick="nextStep(1)">Continuer</button>
+                    </div>
+
+                    <!-- Step 2: Niveau d'études -->
+                    <div id="formStep2" class="form-group hidden">
+                        <label for="level">Quel est ton niveau d'études ? *</label>
+                        <select id="level" onchange="updateLevelOptions()" required>
+                            <option value="">-- Sélectionne --</option>
+                            <option value="primaire">Primaire (6-12 ans)</option>
+                            <option value="college">Collège (11-15 ans)</option>
+                            <option value="lycee">Lycée (15-18 ans)</option>
+                            <option value="universite">Université (18+)</option>
+                        </select>
+                        <div class="form-group hidden" id="classSelectDiv" style="margin-top: 1rem;">
+                            <label for="classSelect">Quelle est ta classe ? *</label>
+                            <select id="classSelect">
+                                <option value="">-- Sélectionne --</option>
+                            </select>
+                        </div>
+                        <div class="form-group hidden" id="domainSelectDiv" style="margin-top: 1rem;">
+                            <label for="domainSelect">Quel domaine te passionne ? *</label>
+                            <select id="domainSelect">
+                                <option value="">-- Sélectionne --</option>
+                                <option value="ia">Intelligence Artificielle</option>
+                                <option value="informatique">Informatique</option>
+                                <option value="medecine">Médecine</option>
+                                <option value="droit">Droit</option>
+                                <option value="economie">Économie / Gestion</option>
+                            </select>
+                        </div>
+                        <button type="button" class="submit-btn" style="margin-top: 1.5rem;" onclick="nextStep(2)">Continuer</button>
+                    </div>
+
+                    <!-- Step 3: Confirmation -->
+                    <div id="formStep3" class="form-group hidden">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary-blue);">Résumé de ton profil</h3>
+                        <div style="background: var(--primary-beige); padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                            <p><strong>Nom:</strong> <span id="summaryName"></span></p>
+                            <p><strong>Email:</strong> <span id="summaryEmail"></span></p>
+                            <p><strong>Niveau:</strong> <span id="summaryLevel"></span></p>
+                            <p id="summaryClassLine" style="display:none;"><strong>Classe:</strong> <span id="summaryClass"></span></p>
+                            <p id="summaryDomainLine" style="display:none;"><strong>Domaine:</strong> <span id="summaryDomain"></span></p>
+                        </div>
+                        <button type="submit" class="submit-btn">Créer mon compte</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2026 Boussole du Savoir. Conçue avec ❤️ pour l'éducation béninoise.</p>
+            <div class="footer-links">
+                <a href="#about">À propos</a>
+                <a href="#contact">Contact</a>
+                <a href="#privacy">Confidentialité</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize Primaire theme by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.className = 'primaire';
+        });
+
+        // Branch Theme Management
+        function changeBranch(branch) {
+            document.body.className = branch;
+            document.querySelectorAll('.branch-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Form state
+        let currentStep = 1;
+        let formData = {
+            firstName: '',
+            lastName: '',
+            email: '',
+            level: '',
+            class: '',
+            domain: ''
+        };
+
+        // Open/Close Modal
+        function openSignUpModal() {
+            document.getElementById('signUpModal').classList.add('active');
+            currentStep = 1;
+            updateStepIndicator();
+        }
+
+        function closeSignUpModal() {
+            document.getElementById('signUpModal').classList.remove('active');
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('signUpModal');
+            if (event.target === modal) {
+                closeSignUpModal();
+            }
+        };
+
+        // Update level options
+        function updateLevelOptions() {
+            const level = document.getElementById('level').value;
+            const classSelectDiv = document.getElementById('classSelectDiv');
+            const domainSelectDiv = document.getElementById('domainSelectDiv');
+            const classSelect = document.getElementById('classSelect');
+
+            classSelectDiv.classList.add('hidden');
+            domainSelectDiv.classList.add('hidden');
+
+            if (level === 'college') {
+                classSelect.innerHTML = `
+                    <option value="">-- Sélectionne --</option>
+                    <option value="6eme">6ème</option>
+                    <option value="5eme">5ème</option>
+                    <option value="4eme">4ème</option>
+                    <option value="3eme">3ème</option>
+                `;
+                classSelectDiv.classList.remove('hidden');
+            } else if (level === 'lycee') {
+                classSelect.innerHTML = `
+                    <option value="">-- Sélectionne --</option>
+                    <option value="2nde">2nde</option>
+                    <option value="1ere_a">1ère A</option>
+                    <option value="1ere_b">1ère B</option>
+                    <option value="1ere_c">1ère C</option>
+                    <option value="1ere_d">1ère D</option>
+                    <option value="term_a">Terminale A</option>
+                    <option value="term_b">Terminale B</option>
+                    <option value="term_c">Terminale C</option>
+                    <option value="term_d">Terminale D</option>
+                `;
+                classSelectDiv.classList.remove('hidden');
+            } else if (level === 'universite') {
+                domainSelectDiv.classList.remove('hidden');
+            }
+        }
+
+        // Navigation steps
+        function nextStep(step) {
+            // Save data
+            if (step === 1) {
+                formData.firstName = document.getElementById('firstName').value;
+                formData.lastName = document.getElementById('lastName').value;
+                formData.email = document.getElementById('email').value;
+
+                if (!formData.firstName || !formData.lastName || !formData.email) {
+                    alert('Veuillez remplir tous les champs');
+                    return;
+                }
+            } else if (step === 2) {
+                formData.level = document.getElementById('level').value;
+                if (formData.level === 'college' || formData.level === 'lycee') {
+                    formData.class = document.getElementById('classSelect').value;
+                    if (!formData.class) {
+                        alert('Veuillez sélectionner votre classe');
+                        return;
+                    }
+                } else if (formData.level === 'universite') {
+                    formData.domain = document.getElementById('domainSelect').value;
+                    if (!formData.domain) {
+                        alert('Veuillez sélectionner un domaine');
+                        return;
+                    }
+                }
+                if (!formData.level) {
+                    alert('Veuillez sélectionner votre niveau');
+                    return;
+                }
+            }
+
+            // Hide current step, show next
+            document.getElementById(`formStep${currentStep}`).classList.add('hidden');
+            currentStep++;
+            document.getElementById(`formStep${currentStep}`).classList.remove('hidden');
+
+            // Update summary
+            if (currentStep === 3) {
+                updateSummary();
+            }
+
+            updateStepIndicator();
+        }
+
+        function updateStepIndicator() {
+            for (let i = 1; i <= 3; i++) {
+                const step = document.getElementById(`step${i}`);
+                if (i <= currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            }
+        }
+
+        function updateSummary() {
+            document.getElementById('summaryName').textContent = `${formData.firstName} ${formData.lastName}`;
+            document.getElementById('summaryEmail').textContent = formData.email;
+            document.getElementById('summaryLevel').textContent = document.getElementById('level').selectedOptions[0]?.text || '';
+
+            if (formData.class) {
+                document.getElementById('summaryClassLine').style.display = 'block';
+                document.getElementById('summaryClass').textContent = formData.class;
+            } else {
+                document.getElementById('summaryClassLine').style.display = 'none';
+            }
+
+            if (formData.domain) {
+                document.getElementById('summaryDomainLine').style.display = 'block';
+                document.getElementById('summaryDomain').textContent = document.getElementById('domainSelect').selectedOptions[0]?.text || '';
+            } else {
+                document.getElementById('summaryDomainLine').style.display = 'none';
+            }
+        }
+
+        // Form submission
+        document.getElementById('signUpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert(`Bienvenue ${formData.firstName}! Ton compte a été créé. Tu peux maintenant te connecter.`);
+            closeSignUpModal();
+            // Reset form
+            this.reset();
+            currentStep = 1;
+            updateStepIndicator();
+        });
+    </script>
+</body>
+</html>

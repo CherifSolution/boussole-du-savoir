@@ -1,0 +1,24 @@
+import type { Metadata } from 'next'
+import './globals.css'
+
+export const metadata: Metadata = {
+  title: 'Boussole du Savoir',
+  description: 'Plateforme éducative ludo-éducative pour le système béninois (primaire → université)',
+  icons: {
+    icon: '🧭',
+  },
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="fr">
+      <body>
+        {children}
+      </body>
+    </html>
+  )
+}

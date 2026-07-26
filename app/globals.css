@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Default: Collège/Lycée */
+  --primary-main: #2C5AA0;
+  --primary-light: #F5E6D3;
+  --accent-gold: #D4AF37;
+  --accent-secondary: #5D7B6F;
+  --text-dark: #2C3E50;
+  --text-light: #ECF0F1;
+  --success: #27AE60;
+  --error: #E74C3C;
+  --background: #FAFAF7;
+  --border: #D5C9B8;
+  --shadow: 0 4px 12px rgba(44, 90, 160, 0.1);
+}
+
+/* Primaire Theme */
+body.primaire {
+  --primary-main: #FF6B9D;
+  --primary-light: #FFE5F0;
+  --accent-gold: #F5A962;
+  --accent-secondary: #7ED4CE;
+  --background: linear-gradient(135deg, #FFE5F0 0%, #FFD4E5 100%);
+  --border: #FFD4E5;
+  --shadow: 0 4px 12px rgba(255, 107, 157, 0.15);
+}
+
+/* Université Theme */
+body.universite {
+  --primary-main: #2C3E50;
+  --primary-light: #ECF0F1;
+  --accent-gold: #1ABC9C;
+  --accent-secondary: #34495E;
+  --text-dark: #1A1A1A;
+  --shadow: 0 4px 12px rgba(44, 62, 80, 0.12);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text-dark);
+  background: var(--background);
+  transition: all 0.4s ease;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes heartBeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+/* Utility Classes */
+.container-app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary-main) 0%, var(--accent-secondary) 100%);
+}
+
+.shadow-brand {
+  box-shadow: var(--shadow);
+}
+
+.text-primary {
+  color: var(--primary-main);
+}
+
+.border-primary {
+  border-color: var(--primary-main);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-main);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boussole du Savoir — Jeu de Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Default: Collège/Lycée */
+            --primary-main: #2C5AA0;
+            --primary-light: #F5E6D3;
+            --accent-gold: #D4AF37;
+            --accent-secondary: #5D7B6F;
+            --text-dark: #2C3E50;
+            --text-light: #ECF0F1;
+            --success: #27AE60;
+            --error: #E74C3C;
+            --background: #FAFAF7;
+            --border: #D5C9B8;
+            --shadow: 0 4px 12px rgba(44, 90, 160, 0.1);
+        }
+
+        /* Primaire Theme - Colorful & Playful */
+        body.primaire {
+            --primary-main: #FF6B9D;
+            --primary-light: #FFE5F0;
+            --accent-gold: #F5A962;
+            --accent-secondary: #7ED4CE;
+            --background: #FFFBF0;
+            --border: #FFD4E5;
+            --text-dark: #2C3E50;
+            --shadow: 0 4px 12px rgba(255, 107, 157, 0.15);
+        }
+
+        /* Université Theme - Sophisticated & Professional */
+        body.universite {
+            --primary-main: #2C3E50;
+            --primary-light: #ECF0F1;
+            --accent-gold: #1ABC9C;
+            --accent-secondary: #34495E;
+            --background: #FAFBFC;
+            --border: #BDC3C7;
+            --text-dark: #1A1A1A;
+            --shadow: 0 4px 12px rgba(44, 62, 80, 0.12);
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--primary-light) 0%, rgba(var(--primary-light), 0.8) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            transition: all 0.4s ease;
+        }
+
+        .game-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Bar */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .game-info {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .level-info {
+            font-weight: 600;
+            color: var(--primary-main);
+        }
+
+        .progress-info {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            opacity: 0.7;
+        }
+
+        .hearts-display {
+            display: flex;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .heart {
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .heart.lost {
+            opacity: 0.3;
+            animation: heartBeat 0.4s ease;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #C19B2E 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Main Question Area */
+        .question-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .question-number {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 3rem;
+            color: var(--text-dark);
+        }
+
+        .illustration {
+            width: 100%;
+            max-width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(var(--primary-main-rgb), 0.08) 0%, rgba(var(--accent-secondary-rgb), 0.08) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem auto;
+            font-size: 4rem;
+            color: var(--primary-main);
+        }
+
+        /* Answer Options */
+        .answer-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .answer-option {
+            padding: 1.5rem;
+            border: 3px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 500;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-option:hover:not(.disabled) {
+            border-color: var(--primary-main);
+            background: rgba(var(--primary-main-rgb), 0.05);
+            transform: translateY(-2px);
+        }
+
+        .answer-option.selected {
+            border-color: var(--primary-main);
+            background: rgba(var(--primary-main-rgb), 0.1);
+        }
+
+        .answer-option.correct {
+            border-color: var(--success);
+            background: rgba(39, 174, 96, 0.1);
+            animation: correctAnswer 0.4s ease;
+        }
+
+        .answer-option.incorrect {
+            border-color: var(--error);
+            background: rgba(231, 76, 60, 0.1);
+            animation: incorrectAnswer 0.4s ease;
+        }
+
+        @keyframes correctAnswer {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes incorrectAnswer {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .answer-option.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .answer-text {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .answer-indicator {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .answer-option:hover .answer-indicator:not(.disabled) {
+            background: var(--primary-main);
+            color: white;
+            border-color: var(--primary-main);
+        }
+
+        .answer-option.selected .answer-indicator {
+            background: var(--primary-main);
+            color: white;
+            border-color: var(--primary-main);
+        }
+
+        .answer-option.correct .answer-indicator {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .answer-option.incorrect .answer-indicator {
+            background: var(--error);
+            color: white;
+            border-color: var(--error);
+        }
+
+        /* Feedback Message */
+        .feedback-message {
+            display: none;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        .feedback-message.correct {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+            border: 2px solid var(--success);
+        }
+
+        .feedback-message.incorrect {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--error);
+            border: 2px solid var(--error);
+        }
+
+        .feedback-message.shown {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .explanation {
+            display: none;
+            background: var(--primary-beige);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .explanation.shown {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        /* Control Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-main);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary-main);
+            background: rgba(var(--primary-main-rgb), 0.05);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-main) 0%, var(--accent-secondary) 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(var(--primary-main-rgb), 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Result Screen */
+        .result-screen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-screen.shown {
+            display: block;
+        }
+
+        .result-icon {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-main);
+        }
+
+        .result-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+
+        .score-box {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, #C19B2E 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .score-box .big-number {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .score-box p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-gold) 100%);
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .game-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .game-info {
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .question-container {
+                padding: 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1.4rem;
+            }
+
+            .answer-options {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .result-title {
+                font-size: 1.8rem;
+            }
+
+            .score-box .big-number {
+                font-size: 3rem;
+            }
+
+            .result-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Branch Selector for Quiz */
+        .branch-selector-quiz {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .branch-btn-quiz {
+            padding: 0.5rem 1rem;
+            border: 2px solid white;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .branch-btn-quiz:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .branch-btn-quiz.active {
+            background: white;
+            color: var(--primary-main);
+        }
+    </style>
+</head>
+<body>
+    <!-- Branch Selector -->
+    <div class="branch-selector-quiz">
+        <button class="branch-btn-quiz active" onclick="changeBranchQuiz('primaire')">Primaire</button>
+        <button class="branch-btn-quiz" onclick="changeBranchQuiz('college')">Collège/Lycée</button>
+        <button class="branch-btn-quiz" onclick="changeBranchQuiz('universite')">Université</button>
+    </div>
+
+    <div class="game-container">
+        <!-- Game Header -->
+        <div class="game-header">
+            <div class="game-info">
+                <div class="level-info">
+                    📚 Niveau 1: <span id="levelTitle">Découverte des Lettres</span>
+                </div>
+                <div class="progress-info">
+                    Question <span id="currentQuestion">1</span> / <span id="totalQuestions">10</span>
+                </div>
+            </div>
+            <div class="hearts-display" id="heartsDisplay">
+                <span class="heart">❤️</span>
+                <span class="heart">❤️</span>
+                <span class="heart">❤️</span>
+            </div>
+            <div class="score-display">
+                Score: <span id="scoreValue">0</span>%
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar" style="width: 10%;"></div>
+        </div>
+
+        <!-- Game Question Section -->
+        <div id="gameSection">
+            <div class="question-container">
+                <div class="question-number" id="questionNumber">Question 1 de 10</div>
+                <div class="question-text" id="questionText">Quelle est la première lettre de l'alphabet ?</div>
+
+                <div class="illustration">🎨</div>
+
+                <div class="feedback-message" id="feedbackMessage"></div>
+
+                <div class="answer-options" id="answerOptions">
+                    <!-- Answers will be inserted here -->
+                </div>
+
+                <div class="explanation" id="explanation"></div>
+
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="goBack()">← Retour</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Suivant →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="resultScreen" class="result-screen">
+            <div class="result-icon" id="resultIcon">🎉</div>
+            <div class="result-title" id="resultTitle">Bravo !</div>
+            <div class="result-subtitle" id="resultSubtitle">Tu as réussi ce niveau avec succès</div>
+
+            <div class="score-box">
+                <p>Ton score final</p>
+                <div class="big-number" id="finalScore">85%</div>
+                <p id="scoreMessage">Excellent travail ! Continue comme ça 🌟</p>
+            </div>
+
+            <div class="result-buttons">
+                <button class="btn btn-secondary" onclick="retryLevel()">Recommencer</button>
+                <button class="btn btn-primary" onclick="nextLevel()">Niveau Suivant</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Primaire theme by default
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.className = 'primaire';
+        });
+
+        // Branch Theme Management
+        function changeBranchQuiz(branch) {
+            document.body.className = branch;
+            document.querySelectorAll('.branch-btn-quiz').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Sample Questions
+        const quizData = [
+            {
+                id: 1,
+                question: "Quelle est la première lettre de l'alphabet ?",
+                answers: [
+                    { text: "A", correct: true },
+                    { text: "B", correct: false },
+                    { text: "C", correct: false },
+                    { text: "D", correct: false }
+                ],
+                explanation: "La lettre 'A' est la première lettre de l'alphabet français. Elle est très importante pour apprendre à lire et à écrire."
+            },
+            {
+                id: 2,
+                question: "Combien de voyelles y a-t-il dans l'alphabet français ?",
+                answers: [
+                    { text: "3", correct: false },
+                    { text: "5", correct: true },
+                    { text: "7", correct: false },
+                    { text: "10", correct: false }
+                ],
+                explanation: "Il y a 5 voyelles dans l'alphabet français : A, E, I, O, U. Les autres lettres sont des consonnes."
+            },
+            {
+                id: 3,
+                question: "Quel mot commence par la lettre 'P' ?",
+                answers: [
+                    { text: "Chat", correct: false },
+                    { text: "Panier", correct: true },
+                    { text: "Maison", correct: false },
+                    { text: "Robe", correct: false }
+                ],
+                explanation: "Le mot 'Panier' commence par la lettre 'P'. C'est un objet utilisé pour porter des choses."
+            },
+            {
+                id: 4,
+                question: "Quelle est la dernière lettre de l'alphabet ?",
+                answers: [
+                    { text: "W", correct: false },
+                    { text: "X", correct: false },
+                    { text: "Y", correct: false },
+                    { text: "Z", correct: true }
+                ],
+                explanation: "La lettre 'Z' est la dernière lettre de l'alphabet français. Elle est souvent utilisée dans des mots comme 'zèbre' ou 'zone'."
+            },
+            {
+                id: 5,
+                question: "Le mot 'école' a combien de lettres ?",
+                answers: [
+                    { text: "4", correct: false },
+                    { text: "5", correct: true },
+                    { text: "6", correct: false },
+                    { text: "7", correct: false }
+                ],
+                explanation: "Le mot 'école' a 5 lettres : é-c-o-l-e. C'est le lieu où les enfants vont apprendre."
+            }
+        ];
+
+        // Game State
+        let currentQuestion = 0;
+        let hearts = 3;
+        let score = 0;
+        let answeredQuestions = 0;
+        let selectedAnswer = null;
+        let questionAnswered = false;
+
+        // Initialize Game
+        function initGame() {
+            renderQuestion();
+        }
+
+        // Render Current Question
+        function renderQuestion() {
+            const question = quizData[currentQuestion];
+
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} de ${quizData.length}`;
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('currentQuestion').textContent = currentQuestion + 1;
+            document.getElementById('totalQuestions').textContent = quizData.length;
+
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // Clear feedback
+            document.getElementById('feedbackMessage').classList.remove('shown', 'correct', 'incorrect');
+            document.getElementById('explanation').classList.remove('shown');
+            document.getElementById('nextBtn').disabled = true;
+            selectedAnswer = null;
+            questionAnswered = false;
+
+            // Render answers
+            const answersHtml = question.answers.map((answer, index) => `
+                <div class="answer-option" onclick="selectAnswer(${index})">
+                    <div class="answer-text">
+                        <div class="answer-indicator">${String.fromCharCode(65 + index)}</div>
+                        <span>${answer.text}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('answerOptions').innerHTML = answersHtml;
+        }
+
+        // Select Answer
+        function selectAnswer(index) {
+            if (questionAnswered) return;
+
+            selectedAnswer = index;
+            const question = quizData[currentQuestion];
+            const isCorrect = question.answers[index].correct;
+
+            // Update UI
+            const options = document.querySelectorAll('.answer-option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+                if (isCorrect || (i !== index && !isCorrect)) {
+                    opt.classList.add('disabled');
+                }
+            });
+
+            // Show feedback
+            const feedback = document.getElementById('feedbackMessage');
+            if (isCorrect) {
+                feedback.textContent = '✓ Correct ! Excellent travail !';
+                feedback.className = 'feedback-message correct shown';
+                score += 20;
+            } else {
+                feedback.textContent = '✗ Incorrect. La bonne réponse était: ' + question.answers.find(a => a.correct).text;
+                feedback.className = 'feedback-message incorrect shown';
+                hearts--;
+                updateHearts();
+            }
+
+            // Show explanation
+            document.getElementById('explanation').textContent = question.explanation;
+            document.getElementById('explanation').classList.add('shown');
+
+            questionAnswered = true;
+            document.getElementById('nextBtn').disabled = false;
+
+            // Update score
+            updateScore();
+        }
+
+        // Update Hearts Display
+        function updateHearts() {
+            const heartsDisplay = document.getElementById('heartsDisplay');
+            heartsDisplay.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const heart = document.createElement('span');
+                heart.className = 'heart' + (i >= hearts ? ' lost' : '');
+                heart.textContent = '❤️';
+                heartsDisplay.appendChild(heart);
+            }
+
+            if (hearts === 0) {
+                setTimeout(resetLevel, 1500);
+            }
+        }
+
+        // Update Score
+        function updateScore() {
+            const maxScore = quizData.length * 20;
+            const percentage = Math.round((score / maxScore) * 100);
+            document.getElementById('scoreValue').textContent = percentage;
+        }
+
+        // Next Question
+        function nextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Go Back
+        function goBack() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            } else {
+                alert('Vous êtes à la première question');
+            }
+        }
+
+        // Show Results
+        function showResults() {
+            document.getElementById('gameSection').style.display = 'none';
+            document.getElementById('resultScreen').classList.add('shown');
+
+            const finalScore = Math.round((score / (quizData.length * 20)) * 100);
+            document.getElementById('finalScore').textContent = finalScore + '%';
+
+            if (finalScore >= 80) {
+                document.getElementById('resultIcon').textContent = '🎉';
+                document.getElementById('resultTitle').textContent = 'Bravo !';
+                document.getElementById('resultSubtitle').textContent = 'Tu as réussi ce niveau avec succès !';
+                document.getElementById('scoreMessage').textContent = 'Excellent travail ! Continue comme ça 🌟';
+            } else if (finalScore >= 60) {
+                document.getElementById('resultIcon').textContent = '👍';
+                document.getElementById('resultTitle').textContent = 'Pas mal !';
+                document.getElementById('resultSubtitle').textContent = 'Tu peux réussir mieux encore';
+                document.getElementById('scoreMessage').textContent = 'Encore un effort et tu l\'auras ! 💪';
+            } else {
+                document.getElementById('resultIcon').textContent = '📚';
+                document.getElementById('resultTitle').textContent = 'Continue tes efforts';
+                document.getElementById('resultSubtitle').textContent = 'Pratiquer rend parfait';
+                document.getElementById('scoreMessage').textContent = 'Réessaie et tu amélioreras ton score ! 🚀';
+            }
+        }
+
+        // Retry Level
+        function retryLevel() {
+            currentQuestion = 0;
+            hearts = 3;
+            score = 0;
+            selectedAnswer = null;
+            questionAnswered = false;
+            document.getElementById('gameSection').style.display = 'block';
+            document.getElementById('resultScreen').classList.remove('shown');
+            renderQuestion();
+            updateHearts();
+            updateScore();
+        }
+
+        // Next Level
+        function nextLevel() {
+            alert('Félicitations ! Tu accèdes au niveau suivant !');
+            retryLevel();
+        }
+
+        // Reset Level (when hearts reach 0)
+        function resetLevel() {
+            alert('Tu as perdu tous tes cœurs ! Le niveau recommence.');
+            retryLevel();
+        }
+
+        // Initialize
+        initGame();
+    </script>
+</body>
+</html>
