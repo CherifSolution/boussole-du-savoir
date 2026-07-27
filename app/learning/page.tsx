@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { SUBJECTS_BY_LEVEL, LEVELS } from '@/lib/constants'
+import { LEVELS } from '@/lib/constants'
 import { getSubjectIcon } from '@/lib/utils'
 import SubjectCard from '@/components/learning/SubjectCard'
 

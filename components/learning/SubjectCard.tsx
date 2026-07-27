@@ -3,7 +3,6 @@
 import Link from 'next/link'
 
 interface SubjectCardProps {
-  id: number
   name: string
   description: string
   icon?: string
@@ -11,7 +10,6 @@ interface SubjectCardProps {
 }
 
 export default function SubjectCard({
-  id,
   name,
   description,
   icon,

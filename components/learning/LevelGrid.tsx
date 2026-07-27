@@ -19,7 +19,7 @@ interface LevelGridProps {
   subject: string
 }
 
-export default function LevelGrid({ levels, subject }: LevelGridProps) {
+export default function LevelGrid({ levels }: LevelGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
       {levels.map((level) => (
