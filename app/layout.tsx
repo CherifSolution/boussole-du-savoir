@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import type { ReactNode } from 'react'
 import './globals.css'
 import Providers from '@/components/providers/Providers'
 
