@@ -88,7 +88,6 @@ export default function LearningPage() {
           filteredSubjects.map((subject) => (
             <SubjectCard
               key={subject.id}
-              id={subject.id}
               name={subject.name}
               description={subject.description}
               icon={getSubjectIcon(subject.name)}
