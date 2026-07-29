@@ -20,7 +20,8 @@ export default function ProgressBar({
   showPercentage = true,
 }: ProgressBarProps) {
   const percentage = totalQuestions > 0 ? (currentQuestion / totalQuestions) * 100 : 0
-  const displayScore = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0
+  // score is stored as a percentage in the UI components; display it directly
+  const displayScore = Math.round(score)
 
   return (
     <div className="bg-white rounded-lg shadow-brand p-4 mb-6">

@@ -105,7 +105,8 @@ export default function QuizEngine({
     )?.isCorrect
 
     if (isCorrect) {
-      setScore((prev) => prev + (20 / totalQuestions) * 100)
+      // Each correct answer adds an equal share to reach 100% total.
+      setScore((prev) => prev + Math.round(100 / totalQuestions))
     } else {
       setHearts((prev) => Math.max(0, prev - 1))
     }
@@ -151,7 +152,7 @@ export default function QuizEngine({
           </div>
           <div className="flex justify-between text-sm mb-2">
             <span>Question {currentIndex + 1} / {totalQuestions}</span>
-            <span>Score: {Math.round((score / 100) * 100)}%</span>
+          <span>Score: {Math.round(score)}%</span>
           </div>
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
