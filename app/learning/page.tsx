@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { LEVELS } from '@/lib/constants'
-import { getSubjectIcon } from '@/lib/utils'
+import { getSubjectIcon, slugify } from '@/lib/utils'
 import SubjectCard from '@/components/learning/SubjectCard'
 
 interface Subject {
@@ -91,7 +91,7 @@ export default function LearningPage() {
               name={subject.name}
               description={subject.description}
               icon={getSubjectIcon(subject.name)}
-              href={`/learning/${subject.name.toLowerCase().replace(/\s+/g, '-')}`}
+              href={`/learning/${slugify(subject.name)}`}
             />
           ))
         )}

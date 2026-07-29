@@ -117,7 +117,7 @@ export default function DashboardPage() {
               href="/learning"
               className="px-6 py-3 bg-gradient-to-r from-[var(--primary-main)] to-[var(--accent-secondary)] text-white font-semibold rounded-lg hover:opacity-90 transition"
             >
-              📚 Continuer l'apprentissage
+              📚 Continuer l&apos;apprentissage
             </Link>
             <Link
               href="/dashboard/profile"
@@ -136,7 +136,7 @@ export default function DashboardPage() {
 
           {progress.length === 0 ? (
             <p className="text-[var(--text-dark)] opacity-75 text-center py-8">
-              Tu n'as pas encore complété de quizzes. <br />
+              Tu n&apos;as pas encore complété de quizzes. <br />
               <Link href="/learning" className="text-[var(--primary-main)] font-semibold hover:underline">
                 Commence maintenant →
               </Link>

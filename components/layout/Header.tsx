@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -35,19 +36,35 @@ export default function Header({ title, showNav = true }: HeaderProps) {
 
           {/* Nav & User Menu */}
           <div className="flex items-center gap-6">
-            {showNav && session && (
+            {showNav && (
               <nav className="hidden md:flex gap-6">
+                {session && (
+                  <>
+                    <Link
+                      href="/learning"
+                      className="text-[var(--text-dark)] hover:text-[var(--primary-main)] transition"
+                    >
+                      📚 Apprendre
+                    </Link>
+                    <Link
+                      href="/dashboard"
+                      className="text-[var(--text-dark)] hover:text-[var(--primary-main)] transition"
+                    >
+                      📊 Tableau de bord
+                    </Link>
+                    <Link
+                      href="/chat"
+                      className="text-[var(--text-dark)] hover:text-[var(--primary-main)] transition"
+                    >
+                      💬 Chat
+                    </Link>
+                  </>
+                )}
                 <Link
-                  href="/learning"
+                  href="/about"
                   className="text-[var(--text-dark)] hover:text-[var(--primary-main)] transition"
                 >
-                  📚 Apprendre
-                </Link>
-                <Link
-                  href="/dashboard"
-                  className="text-[var(--text-dark)] hover:text-[var(--primary-main)] transition"
-                >
-                  📊 Tableau de bord
+                  ℹ️ À propos
                 </Link>
               </nav>
             )}
@@ -59,10 +76,12 @@ export default function Header({ title, showNav = true }: HeaderProps) {
                   onClick={() => setMenuOpen(!menuOpen)}
                   className="flex items-center gap-2 p-1 rounded-lg hover:bg-[var(--primary-light)] transition"
                 >
-                  <img
+                  <Image
                     src={getAvatarUrl(session.user?.email || '')}
                     alt={session.user?.email || 'User'}
-                    className="w-8 h-8 rounded-full"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
                   />
                   <span className="hidden sm:inline text-sm font-medium text-[var(--text-dark)]">
                     {session.user?.email?.split('@')[0]}
@@ -101,7 +120,7 @@ export default function Header({ title, showNav = true }: HeaderProps) {
                   href="/register"
                   className="px-4 py-2 bg-[var(--primary-main)] text-white rounded-lg hover:opacity-90 transition"
                 >
-                  S'inscrire
+                  S&apos;inscrire
                 </Link>
               </div>
             )}

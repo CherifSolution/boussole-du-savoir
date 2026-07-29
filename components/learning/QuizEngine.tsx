@@ -38,6 +38,7 @@ export default function QuizEngine({
   const [score, setScore] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [answered, setAnswered] = useState(false)
+  const [gameOver, setGameOver] = useState(false)
   const [loading, setLoading] = useState(initialQuestions ? false : true)
   const [error, setError] = useState('')
 
@@ -100,10 +101,10 @@ export default function QuizEngine({
   }
 
   const currentQuestion = questions[currentIndex]
-  const progress = ((currentIndex + 1) / totalQuestions) * 100
+  const progress = questions.length > 0 ? ((currentIndex + 1) / questions.length) * 100 : 0
 
   const handleSelectAnswer = (answerId: number) => {
-    if (answered) return
+    if (answered || gameOver) return
 
     setSelectedAnswer(answerId)
     const isCorrect = questions[currentIndex].answers.find(
@@ -111,16 +112,23 @@ export default function QuizEngine({
     )?.isCorrect
 
     if (isCorrect) {
-      // Each correct answer adds an equal share to reach 100% total.
-      setScore((prev) => prev + Math.round(100 / totalQuestions))
+      setScore((prev) => Math.min(100, prev + 100 / totalQuestions))
     } else {
-      setHearts((prev) => Math.max(0, prev - 1))
+      setHearts((prev) => {
+        const nextHearts = Math.max(0, prev - 1)
+        if (nextHearts === 0) {
+          setGameOver(true)
+        }
+        return nextHearts
+      })
     }
 
     setAnswered(true)
   }
 
   const handleNext = () => {
+    if (gameOver) return
+
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1)
       setSelectedAnswer(null)
@@ -129,6 +137,15 @@ export default function QuizEngine({
       // Quiz terminé
       onComplete(Math.round(score), hearts)
     }
+  }
+
+  const handleRestart = () => {
+    setCurrentIndex(0)
+    setHearts(3)
+    setScore(0)
+    setSelectedAnswer(null)
+    setAnswered(false)
+    setGameOver(false)
   }
 
   const handleBack = () => {
@@ -218,18 +235,34 @@ export default function QuizEngine({
             </div>
           )}
 
+          {gameOver && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="font-semibold text-red-600 mb-2">💔 Tu as perdu tous tes cœurs !</p>
+              <p className="text-sm text-[var(--text-dark)] mb-4">
+                Le niveau redémarre depuis le début. Essaie encore avec plus de soin.
+              </p>
+              <button
+                type="button"
+                onClick={handleRestart}
+                className="px-6 py-2 bg-[var(--primary-main)] text-white rounded-lg hover:opacity-90"
+              >
+                Recommencer le niveau
+              </button>
+            </div>
+          )}
+
           {/* Buttons */}
           <div className="flex gap-4">
             <button
               onClick={handleBack}
-              disabled={currentIndex === 0}
+              disabled={currentIndex === 0 || gameOver}
               className="px-6 py-2 border-2 border-[var(--border)] text-[var(--primary-main)] rounded-lg hover:bg-[var(--primary-light)] disabled:opacity-50"
             >
               ← Précédent
             </button>
             <button
               onClick={handleNext}
-              disabled={!answered}
+              disabled={!answered || gameOver}
               className="flex-1 px-6 py-2 bg-gradient-to-r from-[var(--primary-main)] to-[var(--accent-secondary)] text-white font-semibold rounded-lg hover:opacity-90 disabled:opacity-50"
             >
               {currentIndex === questions.length - 1 ? 'Terminer' : 'Suivant'} →

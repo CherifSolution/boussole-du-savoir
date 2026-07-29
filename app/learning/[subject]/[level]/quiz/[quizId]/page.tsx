@@ -23,23 +23,23 @@ export default function QuizPage() {
   }, [status, router])
 
   useEffect(() => {
-    if (session?.user?.id && quizId) {
-      fetchQuiz()
-    }
-  }, [session, quizId])
+    if (!session?.user?.id || !quizId) return
 
-  const fetchQuiz = async () => {
-    try {
-      const res = await fetch(`/api/content/quiz/${quizId}`)
-      if (!res.ok) throw new Error('Failed to fetch quiz')
-      const data = await res.json()
-      setQuiz(data)
-    } catch (error) {
-      console.error('Error fetching quiz:', error)
-    } finally {
-      setLoading(false)
+    const fetchQuiz = async () => {
+      try {
+        const res = await fetch(`/api/content/quiz/${quizId}`)
+        if (!res.ok) throw new Error('Failed to fetch quiz')
+        const data = await res.json()
+        setQuiz(data)
+      } catch (error) {
+        console.error('Error fetching quiz:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+
+    fetchQuiz()
+  }, [session, quizId])
 
   const handleQuizComplete = async (score: number, hearts: number) => {
     try {

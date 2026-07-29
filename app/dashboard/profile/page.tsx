@@ -126,7 +126,7 @@ export default function ProfilePage() {
         {/* Level */}
         <div className="bg-white rounded-lg shadow-brand p-6">
           <label className="block text-sm font-semibold text-[var(--text-dark)] mb-2">
-            Niveau d'Étude
+            Niveau d&apos;Étude
           </label>
           <select
             value={profile.level}

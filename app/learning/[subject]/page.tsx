@@ -80,13 +80,15 @@ export default function SubjectPage() {
       const res = await fetch('/api/user/progress')
       if (res.ok) {
         const data = await res.json()
-        const progressMap = new Map()
+        const progressMap = new Map<number, LevelProgress>()
         data.progress?.forEach((p: any) => {
-          progressMap.set(p.id, {
-            levelId: p.id,
-            progress: p.score ? (p.score / 100) * 100 : 0,
-            bestScore: p.score || 0,
-          })
+          if (typeof p.levelNumber === 'number') {
+            progressMap.set(p.levelNumber, {
+              levelId: p.levelId,
+              progress: p.score ? (p.score / 100) * 100 : 0,
+              bestScore: p.score || 0,
+            })
+          }
         })
         setProgress(progressMap)
       }
@@ -132,8 +134,8 @@ export default function SubjectPage() {
         levels={levels.map((level) => ({
           ...level,
           locked: false,
-          progress: progress.get(level.id)?.progress || 0,
-          bestScore: progress.get(level.id)?.bestScore || 0,
+          progress: progress.get(level.levelNumber)?.progress || 0,
+          bestScore: progress.get(level.levelNumber)?.bestScore || 0,
           href: `/learning/${subjectName}/${level.levelNumber}`,
         }))}
         subject={subjectName}

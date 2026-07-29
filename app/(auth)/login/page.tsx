@@ -103,7 +103,7 @@ function LoginForm() {
         </form>
 
         <p className="text-center text-[var(--text-dark)] opacity-70 mt-6">
-          Tu n'as pas de compte ?{' '}
+          Tu n&apos;as pas de compte ?{' '}
           <Link href="/register" className="text-[var(--primary-main)] font-semibold hover:underline">
             Crée un compte
           </Link>

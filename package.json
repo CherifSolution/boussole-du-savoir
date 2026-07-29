@@ -2,6 +2,7 @@
   "name": "boussole-du-savoir",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,31 +13,36 @@
     "cache:warmup": "tsx utils/seed/warmup-cache.ts"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "@anthropic-ai/sdk": "^0.20.7",
+    "bcryptjs": "^2.4.3",
+    "framer-motion": "^10.16.16",
     "next": "^14.2.3",
     "next-auth": "^4.24.7",
-    "bcryptjs": "^2.4.3",
     "node-postgres": "^0.6.2",
     "pg": "^8.11.3",
-    "zod": "^3.22.4",
-    "framer-motion": "^10.16.16",
-    "recharts": "^2.12.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-player": "^2.14.2",
-    "@anthropic-ai/sdk": "^0.20.7"
+    "recharts": "^2.12.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.10.6",
+    "@types/pg": "^8.11.5",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/pg": "^8.11.5",
+    "@typescript-eslint/eslint-plugin": "^8.65.0",
+    "@typescript-eslint/parser": "^8.65.0",
     "autoprefixer": "^10.4.17",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.1",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.2.3",
-    "tsx": "^4.7.0"
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
   }
 }

@@ -20,24 +20,28 @@ export async function GET(request: NextRequest) {
       `SELECT
         up.id,
         up.quiz_id as quizId,
-        q.title,
+       q.title,
         q.subject_id as subjectId,
         s.name as subjectName,
-        up.score,
-        up.status,
-        up.hearts_remaining as heartsRemaining,
-        up.completed_at as completedAt
-       FROM user_progress up
-       JOIN quizzes q ON up.quiz_id = q.id
-       JOIN subjects s ON q.subject_id = s.id
-       WHERE up.user_id = $1
-       ORDER BY up.completed_at DESC`,
+       q.level_id as levelId,
+       l.level_number as levelNumber,
+       up.score,
+       up.status,
+       up.hearts_remaining as heartsRemaining,
+       up.completed_at as completedAt
+      FROM user_progress up
+      JOIN quizzes q ON up.quiz_id = q.id
+      JOIN subjects s ON q.subject_id = s.id
+      JOIN levels l ON q.level_id = l.id
+      WHERE up.user_id = $1
+      ORDER BY up.completed_at DESC`,
       [userId]
     )
-
     const progress = result.rows.map((row: any) => ({
       id: row.id,
       quizId: row.quizid,
+      levelId: row.levelid,
+      levelNumber: row.levelnumber,
       title: row.title,
       subjectId: row.subjectid,
       subjectName: row.subjectname,

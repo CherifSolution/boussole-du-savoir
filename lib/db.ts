@@ -21,7 +21,7 @@ function getPool(): Pool {
 
 export async function query(
   text: string,
-  params?: (string | number | boolean | null)[]
+  params?: any[]
 ): Promise<QueryResult> {
   const pool = getPool()
   return pool.query(text, params)
