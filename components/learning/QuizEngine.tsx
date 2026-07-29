@@ -28,6 +28,7 @@ export default function QuizEngine({
   quizId,
   quizTitle,
   totalQuestions,
+  initialQuestions,
   onComplete,
   onCancel,
 }: QuizEngineProps) {
