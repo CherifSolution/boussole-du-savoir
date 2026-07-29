@@ -100,8 +100,9 @@ export default function QuizPage() {
   return (
     <QuizEngine
       quizId={quizId}
-      quizTitle={quiz.title || 'Quiz'}
-      totalQuestions={quiz.totalQuestions || 10}
+      quizTitle={quiz.quiz?.title || 'Quiz'}
+      totalQuestions={quiz.quiz?.totalQuestions || 10}
+      initialQuestions={quiz.questions}
       onComplete={handleQuizComplete}
       onCancel={handleCancel}
     />

@@ -43,11 +43,10 @@ export async function GET(
     const questions = await Promise.all(
       questionsResult.rows.map(async (question) => {
         const answersResult = await query(
-          `SELECT id, option_text as text, is_correct as isCorrect
+          `          SELECT id, option_text as text, is_correct as "isCorrect"
            FROM answer_options
            WHERE question_id = $1
-           ORDER BY order_index`,
-          [question.id]
+           ORDER BY order_index`,          [question.id]
         )
 
         return {
@@ -57,7 +56,7 @@ export async function GET(
           answers: answersResult.rows.map((a: any) => ({
             id: a.id,
             text: a.text,
-            isCorrect: a.iscorrect,
+            isCorrect: a.isCorrect,
           })),
         }
       })

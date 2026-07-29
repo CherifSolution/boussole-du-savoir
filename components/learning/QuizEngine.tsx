@@ -19,6 +19,7 @@ interface QuizEngineProps {
   quizId: string
   quizTitle: string
   totalQuestions: number
+  initialQuestions?: Question[]
   onComplete: (score: number, hearts: number) => void
   onCancel: () => void
 }
@@ -30,17 +31,21 @@ export default function QuizEngine({
   onComplete,
   onCancel,
 }: QuizEngineProps) {
-  const [questions, setQuestions] = useState<Question[]>([])
+  const [questions, setQuestions] = useState<Question[]>(initialQuestions ?? [])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [hearts, setHearts] = useState(3)
   const [score, setScore] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [answered, setAnswered] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(initialQuestions ? false : true)
   const [error, setError] = useState('')
 
   // Charger les questions
   useEffect(() => {
+    if (initialQuestions) {
+      return
+    }
+
     const fetchQuestions = async () => {
       try {
         const res = await fetch(`/api/content/quiz/${quizId}`)
@@ -56,7 +61,7 @@ export default function QuizEngine({
     }
 
     fetchQuestions()
-  }, [quizId])
+  }, [initialQuestions, quizId])
 
   if (loading) {
     return (
